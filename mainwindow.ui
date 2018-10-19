@@ -22,10 +22,40 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="0">
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="pushButtonCheck">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>56</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="0">
      <widget class="QTableView" name="tableView"/>
     </item>
-    <item row="2" column="1">
+    <item row="3" column="1">
      <widget class="QPushButton" name="pushButton">
       <property name="minimumSize">
        <size>
@@ -38,7 +68,7 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0">
+    <item row="1" column="0">
      <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -51,7 +81,7 @@
       </property>
      </spacer>
     </item>
-    <item row="1" column="0">
+    <item row="2" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="pushButton_1">
@@ -139,29 +169,7 @@
       </item>
      </layout>
     </item>
-    <item row="0" column="1">
-     <widget class="QPushButton" name="pushButtonSetting">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>56</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Setting</string>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="shortcut">
-       <string>Ctrl+S, Ctrl+S, Ctrl+S</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="label">
@@ -205,7 +213,7 @@
       </item>
      </layout>
     </item>
-    <item row="5" column="1">
+    <item row="6" column="1">
      <widget class="QPushButton" name="pushButtonExport">
       <property name="minimumSize">
        <size>
@@ -217,6 +225,46 @@
        <string>Export</string>
       </property>
      </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="pushButtonSetting">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>56</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Setting</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+S, Ctrl+S, Ctrl+S</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="labelInfo">
+        <property name="text">
+         <string>Info : </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

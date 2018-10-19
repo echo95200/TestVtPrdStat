@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_5->setObjectName("button5");
     ui->pushButton_6->setObjectName("button6");
     ui->pushButton_7->setObjectName("button7");
-    ui->pushButton->setEnabled(true);
+    ui->pushButton->setEnabled(false);
     ui->pushButtonExport->setEnabled(false);
 
     ui->dateEdit->setDisplayFormat("yyyy/MM/dd");
@@ -30,11 +30,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->verticalHeader()->hide();
 
+    ui->progressBar->hide();
+
     m_pDialogSetting = new DialogSetting();
     m_sIniFilePath = QApplication::applicationDirPath() + QDir::separator() + "VtPrdStat.ini";
-    connect(m_pDialogSetting,SIGNAL(signalSettingConfirm()),this,SLOT(slotCheckConnection()));
-
-    this->slotCheckConnection();
+    //connect(m_pDialogSetting,SIGNAL(signalSettingConfirm()),this,SLOT(slotCheckConnection()));
 }
 
 MainWindow::~MainWindow()
@@ -50,9 +50,16 @@ MainWindow::~MainWindow()
     m_DatabaseVentap7.close();
 }
 
+//When the button setting is clicked
 void MainWindow::on_pushButtonSetting_clicked()
 {
     m_pDialogSetting->show();
+}
+
+//When the button check is clicked
+void MainWindow::on_pushButtonCheck_clicked()
+{
+    this->slotCheckConnection();
 }
 
 //The methode for checking the connection of the database and return the QSqlDatabase
@@ -83,6 +90,11 @@ QSqlDatabase MainWindow::checkConnection(QString strDatabaseHost, QString strDat
 //Check every connection of the database
 void MainWindow::slotCheckConnection()
 {
+    ui->progressBar->setValue(0);
+    ui->progressBar->show();
+    ui->progressBar->setMinimum(0);
+    ui->progressBar->setMaximum(0);
+
     QString strHost = "";
     QString strAddress = "";
     QString strDatabaseName = "";
@@ -93,13 +105,16 @@ void MainWindow::slotCheckConnection()
     strHost = settings.value("Host").toString();
     strAddress = settings.value("Address").toString();
     settings.endGroup();
+    ui->labelInfo->setText("Connect with the Erp");
     m_DatabaseERP = checkConnection(strHost,strAddress,m_DatabaseERP,strDatabaseName);
     if (m_DatabaseERP.isOpen()) {
         m_flagErp = true;
         ui->pushButton->setEnabled(true);
+        ui->labelInfo->setText("Connect with the Erp successful");
     } else {
         m_flagErp = false;
         ui->pushButton->setEnabled(false);
+        ui->labelInfo->setText("Connect the Erp failed");
     }
 
     strDatabaseName = "POS1";
@@ -107,13 +122,16 @@ void MainWindow::slotCheckConnection()
     strHost = settings.value("Host").toString();
     strAddress = settings.value("Address").toString();
     settings.endGroup();
+    ui->labelInfo->setText("Connect with the " + strDatabaseName);
     m_DatabaseVentap1 = checkConnection(strHost,strAddress,m_DatabaseVentap1,strDatabaseName);
     if (m_DatabaseVentap1.isOpen()) {
         m_flag1 = true;
         ui->pushButton_1->setStyleSheet("#button1 {border:1px solid rgb(0,255,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " successful");
     } else {
         m_flag1 = false;
         ui->pushButton_1->setStyleSheet("#button1 {border:1px solid rgb(255,0,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " failed");
     }
 
     strDatabaseName = "POS2";
@@ -121,13 +139,16 @@ void MainWindow::slotCheckConnection()
     strHost = settings.value("Host").toString();
     strAddress = settings.value("Address").toString();
     settings.endGroup();
+    ui->labelInfo->setText("Connect with the " + strDatabaseName);
     m_DatabaseVentap2 = checkConnection(strHost,strAddress,m_DatabaseVentap2,strDatabaseName);
     if (m_DatabaseVentap2.isOpen()) {
         m_flag2 = true;
         ui->pushButton_2->setStyleSheet("#button2 {border:1px solid rgb(0,255,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " successful");
     } else {
         m_flag2 = false;
         ui->pushButton_2->setStyleSheet("#button2 {border:1px solid rgb(255,0,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " failed");
     }
 
     strDatabaseName = "POS3";
@@ -135,13 +156,16 @@ void MainWindow::slotCheckConnection()
     strHost = settings.value("Host").toString();
     strAddress = settings.value("Address").toString();
     settings.endGroup();
+    ui->labelInfo->setText("Connect with the " + strDatabaseName);
     m_DatabaseVentap3 = checkConnection(strHost,strAddress,m_DatabaseVentap3,strDatabaseName);
     if (m_DatabaseVentap3.isOpen()) {
         m_flag3 = true;
         ui->pushButton_3->setStyleSheet("#button3 {border:1px solid rgb(0,255,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " successful");
     } else {
         m_flag3 = false;
         ui->pushButton_3->setStyleSheet("#button3 {border:1px solid rgb(255,0,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " failed");
     }
 
     strDatabaseName = "POS4";
@@ -149,13 +173,16 @@ void MainWindow::slotCheckConnection()
     strHost = settings.value("Host").toString();
     strAddress = settings.value("Address").toString();
     settings.endGroup();
+    ui->labelInfo->setText("Connect with the " + strDatabaseName + " successful");
     m_DatabaseVentap4 = checkConnection(strHost,strAddress,m_DatabaseVentap4,strDatabaseName);
     if (m_DatabaseVentap4.isOpen()) {
         m_flag4 = true;
         ui->pushButton_4->setStyleSheet("#button4 {border:1px solid rgb(0,255,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " successful");
     } else {
         m_flag4 = false;
         ui->pushButton_4->setStyleSheet("#button4 {border:1px solid rgb(255,0,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " failed");
     }
 
     strDatabaseName = "POS5";
@@ -163,13 +190,16 @@ void MainWindow::slotCheckConnection()
     strHost = settings.value("Host").toString();
     strAddress = settings.value("Address").toString();
     settings.endGroup();
+    ui->labelInfo->setText("Connect with the " + strDatabaseName);
     m_DatabaseVentap5 = checkConnection(strHost,strAddress,m_DatabaseVentap5,strDatabaseName);
     if (m_DatabaseVentap5.isOpen()) {
         m_flag5 = true;
         ui->pushButton_5->setStyleSheet("#button5 {border:1px solid rgb(0,255,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " successful");
     } else {
         m_flag5 = false;
         ui->pushButton_5->setStyleSheet("#button5 {border:1px solid rgb(255,0,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " failed");
     }
 
     strDatabaseName = "POS6";
@@ -177,13 +207,16 @@ void MainWindow::slotCheckConnection()
     strHost = settings.value("Host").toString();
     strAddress = settings.value("Address").toString();
     settings.endGroup();
+    ui->labelInfo->setText("Connect with the " + strDatabaseName);
     m_DatabaseVentap6 = checkConnection(strHost,strAddress,m_DatabaseVentap6,strDatabaseName);
     if (m_DatabaseVentap6.isOpen()) {
         m_flag6 = true;
         ui->pushButton_6->setStyleSheet("#button6 {border:1px solid rgb(0,255,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " successful");
     } else {
         m_flag6 = false;
         ui->pushButton_6->setStyleSheet("#button6 {border:1px solid rgb(255,0,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " failed");
     }
 
     strDatabaseName = "POS7";
@@ -191,20 +224,38 @@ void MainWindow::slotCheckConnection()
     strHost = settings.value("Host").toString();
     strAddress = settings.value("Address").toString();
     settings.endGroup();
+    ui->labelInfo->setText("Connect with the " + strDatabaseName);
     m_DatabaseVentap7 = checkConnection(strHost,strAddress,m_DatabaseVentap7,strDatabaseName);
     if (m_DatabaseVentap7.isOpen()) {
         m_flag7 = true;
         ui->pushButton_7->setStyleSheet("#button7 {border:1px solid rgb(0,255,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " successful");
     } else {
         m_flag7 = false;
         ui->pushButton_7->setStyleSheet("#button7 {border:1px solid rgb(255,0,0)}");
+        ui->labelInfo->setText("Connect with the " + strDatabaseName + " failed");
     }
 
+    QString strResult = "Connection finished : ";
+    if (m_flag1) {strResult.append(" Pos1");}
+    if (m_flag2) {strResult.append(" Pos2");}
+    if (m_flag3) {strResult.append(" Pos3");}
+    if (m_flag4) {strResult.append(" Pos4");}
+    if (m_flag5) {strResult.append(" Pos5");}
+    if (m_flag6) {strResult.append(" Pos6");}
+    if (m_flag7) {strResult.append(" Pos7");}
+    strResult.append(" successful. Ready to search...");
+    ui->labelInfo->setText(strResult);
+    ui->progressBar->setMaximum(100);
+    ui->progressBar->setValue(100);
 }
 
 //Once the button Search is clicked
 void MainWindow::on_pushButton_clicked()
 {
+    ui->progressBar->setMinimum(0);
+    ui->progressBar->setMaximum(0);
+
     //Clean the data
     m_iIndexVentap.clear();
     m_strListPrdRef.clear();
@@ -225,14 +276,6 @@ void MainWindow::on_pushButton_clicked()
     //******************************ERP********************************************
     //Invoice
     QSqlQueryModel *pModelErpInv = new QSqlQueryModel();
-//    QString sqlErpInv = "SELECT VIEW_VT_PRD.ID,VIEW_VT_PRD.REFERENCE,VIEW_VT_PRD.DESCRIPTION, "
-//            "SUM(CUS_INVOICE_DETAIL.INVOICE_COUNT) AS CNT,SUM(CUS_INVOICE_DETAIL.INVOICE_FIN_PRICE) AS TOTAL "
-//            "FROM CUS_INVOICE_BILL "
-//            "INNER JOIN CUS_INVOICE_DETAIL ON CUS_INVOICE_DETAIL.INVOICE_ID = CUS_INVOICE_BILL.INVOICE_ID "
-//            "INNER JOIN VIEW_VT_PRD ON VIEW_VT_PRD.ID = CUS_INVOICE_DETAIL.PRODUCT_ID "
-//            "WHERE DATEDIFF(second, timestamp '1/1/1970 00:00:00', CUS_INVOICE_BILL.INVOICE_DATE) > ? "
-//            "AND DATEDIFF(second, timestamp '1/1/1970 00:00:00', CUS_INVOICE_BILL.INVOICE_DATE) < ? "
-//            "GROUP BY VIEW_VT_PRD.ID,VIEW_VT_PRD.REFERENCE,VIEW_VT_PRD.DESCRIPTION";
     QString sqlErpInv = "SELECT VIEW_VT_PRD.ID,VIEW_VT_PRD.REFERENCE,VIEW_VT_PRD.DESCRIPTION, "
                         "CUS_INVOICE_DETAIL.INVOICE_COUNT,CUS_INVOICE_DETAIL.INVOICE_UNIT_COUNT,CUS_INVOICE_DETAIL.INVOICE_FIN_PRICE "
                         "FROM CUS_INVOICE_BILL "
@@ -298,8 +341,11 @@ void MainWindow::on_pushButton_clicked()
 //Create a new table T_VT_PRD_STAT
 void MainWindow::createNewTableErp(QList<QSqlQueryModel*> modelListVentap,QSqlQueryModel *pModelErpInv,QSqlQueryModel *pModelErpSup)
 {
+    bool flag = false;
     QSqlQuery query(m_DatabaseERP);
-    QString sql = "CREATE TABLE T_VT_PRD_STAT ( "
+    QString sqlCheckTableExists = "SELECT * FROM T_VT_PRD_STAT";
+    QString sqlDeleteTable = "DELETE FROM T_VT_PRD_STAT";
+    QString sqlCreateTable = "CREATE TABLE T_VT_PRD_STAT ( "
                 "PRD_ID CHAR(32), "
                 "PRD_REF VARCHAR(20), "
                 "PRD_DESC VARCHAR(200), "
@@ -310,122 +356,148 @@ void MainWindow::createNewTableErp(QList<QSqlQueryModel*> modelListVentap,QSqlQu
                 "TCK_CNT DECIMAL(15,4), "
                 "TCK_TOTAL DECIMAL(9,2) "
             ")";
-    query.prepare(sql);
+    query.prepare(sqlCheckTableExists);
+    flag = query.exec();
+    if (flag) {
+        query.prepare(sqlDeleteTable);
+        flag = query.exec();
+        if (flag) {
+            m_DatabaseERP.commit();
+            ui->labelInfo->setText("SQL Table was deleted successful!");
+        } else {
+            ui->labelInfo->setText("SQL Table was deleted failed!");
+        }
+    } else {
+            query.prepare(sqlCreateTable);
+            flag = query.exec();
+            if (flag) {
+                ui->labelInfo->setText("SQL Table was created successful!");
+            } else {
+                ui->labelInfo->setText("SQL Table was created failed!" + query.lastError().text());
+            }
+    }
 
-    sql = "DELETE FROM T_VT_PRD_STAT";
-    query.prepare(sql);
+    //If the table was created successful
+    bool flagVentap = false;
+    bool flagErpInvoice = false;
+    bool flagErpSup = false;
+    if (flag) {
+        //Insert the infos of the ventaps into the database
+        QString temp = "";
+        double dTemp = 0.00;
+        QString sql = "INSERT INTO T_VT_PRD_STAT "
+              "(PRD_ID, PRD_REF, PRD_DESC, SUP_CNT, SUP_TOTAL, INV_CNT, INV_TOTAL, TCK_CNT, TCK_TOTAL) "
+              "VALUES('', ?, ?, 0, 0, 0, 0, ?, ?)";
+        QList<QString> qList;
+        for (int i = 0;i < modelListVentap.size(); i++) {
+            QSqlQueryModel *pModel = modelListVentap.at(i);
+            int rows = pModel->rowCount();
+            for (int row = 0; row < rows; row++) {
+                qList.clear();
+                for (int column = 0; column < 4; column++) {
+                    if (column < 2) {
+                        temp = pModel->data(pModel->index(row,column)).toString();
+                    } else {
+                        dTemp = pModel->data(pModel->index(row,column)).toDouble();
+                        temp = QString::number(dTemp,10,2);
+                    }
+                    qList.append(temp);
+                }
+                query.prepare(sql);
+                query.bindValue(0,qList.at(0));
+                query.bindValue(1,qList.at(1));
+                query.bindValue(2,qList.at(2).toDouble());
+                query.bindValue(3,qList.at(3).toDouble());
+                flagVentap = query.exec();
+                ui->labelInfo->setText("Read the data from ventap" + i);
+            }
+        }
 
-    //Insert the infos of the ventaps into the database
-    QString temp = "";
-    double dTemp = 0.00;
-    sql = "INSERT INTO T_VT_PRD_STAT "
-          "(PRD_ID, PRD_REF, PRD_DESC, SUP_CNT, SUP_TOTAL, INV_CNT, INV_TOTAL, TCK_CNT, TCK_TOTAL) "
-          "VALUES('', ?, ?, 0, 0, 0, 0, ?, ?)";
-    QList<QString> qList;
-    for (int i = 0;i < modelListVentap.size(); i++) {
-        QSqlQueryModel *pModel = modelListVentap.at(i);
-        int rows = pModel->rowCount();
-        for (int row = 0; row < rows; row++) {
+        //Insert the infos of the Erp invoice into the database
+        temp = "";
+        dTemp = 0.00;
+        double dCount = 0.00;
+        double dUnitCount = 0.00;
+        double dFinPrice = 0.00;
+        sql = "INSERT INTO T_VT_PRD_STAT "
+              "(PRD_ID, PRD_REF, PRD_DESC, SUP_CNT, SUP_TOTAL, INV_CNT, INV_TOTAL, TCK_CNT, TCK_TOTAL) "
+              "VALUES(?, ?, ?, 0, 0, ?, ?, 0, 0)";
+        int rows = pModelErpInv->rowCount();
+        for (int row = 0; row < rows;row++) {
             qList.clear();
-            for (int column = 0; column < 4; column++) {
-                if (column < 2) {
-                    temp = pModel->data(pModel->index(row,column)).toString();
+            for (int column = 0; column < 5; column++) {
+                if (column < 3) {
+                    temp = pModelErpInv->data(pModelErpInv->index(row,column)).toString();
                 } else {
-                    dTemp = pModel->data(pModel->index(row,column)).toDouble();
-                    temp = QString::number(dTemp,10,2);
+                    if (column == 3) {
+                        dCount = pModelErpInv->data(pModelErpInv->index(row,column)).toDouble();
+                        dUnitCount = pModelErpInv->data(pModelErpInv->index(row,column+1)).toDouble();
+                        dTemp = dCount * dUnitCount;
+                        temp = QString::number(dTemp,10,2);
+                    }
+                    if (column == 4) {
+                        dCount = pModelErpInv->data(pModelErpInv->index(row,column - 1)).toDouble();
+                        dUnitCount = pModelErpInv->data(pModelErpInv->index(row,column)).toDouble();
+                        dFinPrice = pModelErpInv->data(pModelErpInv->index(row,column+1)).toDouble();
+                        dTemp = dCount * dUnitCount * dFinPrice;
+                        temp = QString::number(dTemp,10,2);
+                    }
                 }
                 qList.append(temp);
             }
             query.prepare(sql);
             query.bindValue(0,qList.at(0));
             query.bindValue(1,qList.at(1));
-            query.bindValue(2,qList.at(2).toDouble());
+            query.bindValue(2,qList.at(2));
             query.bindValue(3,qList.at(3).toDouble());
-            query.exec();
+            query.bindValue(4,qList.at(4).toDouble());
+            flagErpInvoice = query.exec();
+            ui->labelInfo->setText("Read the data from Erp invoice...");
         }
-    }
 
-    //Insert the infos of the Erp invoice into the database
-    temp = "";
-    dTemp = 0.00;
-    double dCount = 0.00;
-    double dUnitCount = 0.00;
-    double dFinPrice = 0.00;
-    sql = "INSERT INTO T_VT_PRD_STAT "
-          "(PRD_ID, PRD_REF, PRD_DESC, SUP_CNT, SUP_TOTAL, INV_CNT, INV_TOTAL, TCK_CNT, TCK_TOTAL) "
-          "VALUES(?, ?, ?, 0, 0, ?, ?, 0, 0)";
-    int rows = pModelErpInv->rowCount();
-    for (int row = 0; row < rows;row++) {
-        qList.clear();
-        for (int column = 0; column < 5; column++) {
-            if (column < 3) {
-                temp = pModelErpInv->data(pModelErpInv->index(row,column)).toString();
-            } else {
-                if (column == 3) {
-                    dCount = pModelErpInv->data(pModelErpInv->index(row,column)).toDouble();
-                    dUnitCount = pModelErpInv->data(pModelErpInv->index(row,column+1)).toDouble();
-                    dTemp = dCount * dUnitCount;
-                    temp = QString::number(dTemp,10,2);
+        //Insert the infos of the Erp Supplier into the database
+        temp = "";
+        dTemp = 0.00;
+        sql = "INSERT INTO T_VT_PRD_STAT "
+              "(PRD_ID, PRD_REF, PRD_DESC, SUP_CNT, SUP_TOTAL, INV_CNT, INV_TOTAL, TCK_CNT, TCK_TOTAL) "
+              "VALUES(?, ?, ?, ?, ?, 0, 0, 0, 0)";
+        rows = pModelErpSup->rowCount();
+        for (int row = 0; row < rows;row++) {
+            qList.clear();
+            for (int column = 0; column < 5; column++) {
+                if (column < 3) {
+                    temp = pModelErpSup->data(pModelErpSup->index(row,column)).toString();
+                } else {
+                    if (column == 3) {
+                        dCount = pModelErpInv->data(pModelErpInv->index(row,column)).toDouble();
+                        dUnitCount = pModelErpInv->data(pModelErpInv->index(row,column+1)).toDouble();
+                        dTemp = dCount * dUnitCount;
+                        temp = QString::number(dTemp,10,2);
+                    }
+                    if (column == 4) {
+                        dCount = pModelErpInv->data(pModelErpInv->index(row,column - 1)).toDouble();
+                        dUnitCount = pModelErpInv->data(pModelErpInv->index(row,column)).toDouble();
+                        dFinPrice = pModelErpInv->data(pModelErpInv->index(row,column+1)).toDouble();
+                        dTemp = dCount * dUnitCount * dFinPrice;
+                        temp = QString::number(dTemp,10,2);
+                    }
                 }
-                if (column == 4) {
-                    dCount = pModelErpInv->data(pModelErpInv->index(row,column - 1)).toDouble();
-                    dUnitCount = pModelErpInv->data(pModelErpInv->index(row,column)).toDouble();
-                    dFinPrice = pModelErpInv->data(pModelErpInv->index(row,column+1)).toDouble();
-                    dTemp = dCount * dUnitCount * dFinPrice;
-                    temp = QString::number(dTemp,10,2);
-                }
+                qList.append(temp);
             }
-            qList.append(temp);
+            query.prepare(sql);
+            query.bindValue(0,qList.at(0));
+            query.bindValue(1,qList.at(1));
+            query.bindValue(2,qList.at(2));
+            query.bindValue(3,qList.at(3).toDouble());
+            query.bindValue(4,qList.at(4).toDouble());
+            flagErpSup = query.exec();
+            ui->labelInfo->setText("Read the data from Erp Supplier...");
         }
-        query.prepare(sql);
-        query.bindValue(0,qList.at(0));
-        query.bindValue(1,qList.at(1));
-        query.bindValue(2,qList.at(2));
-        query.bindValue(3,qList.at(3).toDouble());
-        query.bindValue(4,qList.at(4).toDouble());
-        query.exec();
+
     }
 
-    //Insert the infos of the Erp Supplier into the database
-    temp = "";
-    dTemp = 0.00;
-    sql = "INSERT INTO T_VT_PRD_STAT "
-          "(PRD_ID, PRD_REF, PRD_DESC, SUP_CNT, SUP_TOTAL, INV_CNT, INV_TOTAL, TCK_CNT, TCK_TOTAL) "
-          "VALUES(?, ?, ?, ?, ?, 0, 0, 0, 0)";
-    rows = pModelErpSup->rowCount();
-    for (int row = 0; row < rows;row++) {
-        qList.clear();
-        for (int column = 0; column < 5; column++) {
-            if (column < 3) {
-                temp = pModelErpSup->data(pModelErpSup->index(row,column)).toString();
-            } else {
-                if (column == 3) {
-                    dCount = pModelErpInv->data(pModelErpInv->index(row,column)).toDouble();
-                    dUnitCount = pModelErpInv->data(pModelErpInv->index(row,column+1)).toDouble();
-                    dTemp = dCount * dUnitCount;
-                    temp = QString::number(dTemp,10,2);
-                }
-                if (column == 4) {
-                    dCount = pModelErpInv->data(pModelErpInv->index(row,column - 1)).toDouble();
-                    dUnitCount = pModelErpInv->data(pModelErpInv->index(row,column)).toDouble();
-                    dFinPrice = pModelErpInv->data(pModelErpInv->index(row,column+1)).toDouble();
-                    dTemp = dCount * dUnitCount * dFinPrice;
-                    temp = QString::number(dTemp,10,2);
-                }
-            }
-            qList.append(temp);
-        }
-        query.prepare(sql);
-        query.bindValue(0,qList.at(0));
-        query.bindValue(1,qList.at(1));
-        query.bindValue(2,qList.at(2));
-        query.bindValue(3,qList.at(3).toDouble());
-        query.bindValue(4,qList.at(4).toDouble());
-        query.exec();
-    }
-
-
-    sql = "SELECT PRD_REF, PRD_DESC, SUM(SUP_CNT) AS SUP_CNT, "
+    bool flagResult = false;
+    QString sql = "SELECT PRD_REF, PRD_DESC, SUM(SUP_CNT) AS SUP_CNT, "
           "SUM(SUP_TOTAL) AS SUP_TOTAL, "
           "SUM(INV_CNT) AS INV_CNT, "
           "SUM(INV_TOTAL) AS INV_TOTAL, "
@@ -434,7 +506,14 @@ void MainWindow::createNewTableErp(QList<QSqlQueryModel*> modelListVentap,QSqlQu
           "FROM T_VT_PRD_STAT "
           "GROUP BY PRD_REF, PRD_DESC" ;
     query.prepare(sql);
-    query.exec();
+    flagResult = query.exec();
+    if (flagResult) {
+        ui->labelInfo->setText("Read the data from Table T_VT_PRD_STAT successful!");
+        ui->progressBar->setMaximum(100);
+        ui->progressBar->setValue(100);
+    } else {
+        ui->labelInfo->setText("Read the data from Table T_VT_PRD_STAT failed!");
+    }
     QSqlQueryModel *model = new QSqlQueryModel();
     model->setHeaderData(2,Qt::Horizontal,"SUP_CNT");
     model->setHeaderData(3,Qt::Horizontal,"SUP_TOTAL");
@@ -445,6 +524,7 @@ void MainWindow::createNewTableErp(QList<QSqlQueryModel*> modelListVentap,QSqlQu
     model->setQuery(query);
     ui->tableView->setModel(model);
     ui->tableView->setColumnWidth(1,250);
+    ui->labelInfo->setText("Search finished!");
 }
 
 //Update the tableView, not used in this programme now
@@ -617,3 +697,5 @@ void MainWindow::on_pushButtonExport_clicked()
         QMessageBox::about(NULL,"INFO","File saved successfully!");
     }
 }
+
+
