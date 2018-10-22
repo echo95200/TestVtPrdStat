@@ -15,7 +15,15 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QtXlsx>
+#include <QTcpSocket>
+#include <QTcpServer>
+#include <QThread>
+#include <QElapsedTimer>
+#include <QEventLoop>
+#include <QDebug>
 #include "dialogsetting.h"
+#include "threadworker.h"
+#include "threadsqlconnectionworker.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,13 +39,10 @@ public:
 
     //For every ventap, check the connection
     QSqlDatabase checkConnection(QString strDatabaseHost,QString strDatabaseAddress,QSqlDatabase database,QString databaseName);
-    QSqlQueryModel* execSqlVentap(QSqlDatabase database,QString sqlVentap,qint64 time_t1,qint64 time_t2,
-                                 QSqlQueryModel *model,bool flag);
-    QSqlQueryModel* execSqlErp(QSqlDatabase database,QString sqlErp,qint64 time_t1,qint64 time_t2,
-                                 QSqlQueryModel *model,bool flag);
-    void updateTableView(QList<QSqlQueryModel*> modelListVentap);
-    void createNewTableErp(QList<QSqlQueryModel*> modelListVentap,QSqlQueryModel *pModelErpInv,QSqlQueryModel *pModelErpSup);
-
+    bool execSqlErp(QSqlDatabase database,QString sqlErp,QDate date1,QDate date2);
+    QThread* createThread(QSqlDatabase database,QDate date1,QDate date2,int iIndex);
+    bool initDatabase();
+    void showTableview();
 
 private slots:
     void on_pushButtonSetting_clicked();
@@ -49,6 +54,11 @@ private slots:
     void on_pushButtonExport_clicked();
 
     void on_pushButtonCheck_clicked();
+
+    void slotSettingConfirm();
+    void slotRecevied(QSqlQueryModel *pModel,int index);
+    void slotCheckConnection(bool flag,int index);
+    void slotCheckConnectionFinished();
 
 private:
     Ui::MainWindow *ui;
@@ -66,11 +76,9 @@ private:
     bool m_flagErp = false;
     bool m_flag1,m_flag2,m_flag3,m_flag4,m_flag5,m_flag6,m_flag7;
 
-    QList<int> m_iIndexVentap;
-    QStringList m_strListPrdRef;
-    QStringList m_strListPrdDesc;
-    QList<double> m_dListPrdCnt;
-    QList<double> m_dListPrdTotal;
+    int m_iThreadFinishedCount = 0;
+    int m_iThreadNumber = 0;
+
 };
 
 #endif // MAINWINDOW_H

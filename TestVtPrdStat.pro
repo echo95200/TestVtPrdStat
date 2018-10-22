@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql xlsx
+QT       += core gui sql xlsx network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,11 +27,15 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    dialogsetting.cpp
+    dialogsetting.cpp \
+    threadworker.cpp \
+    threadsqlconnectionworker.cpp
 
 HEADERS += \
         mainwindow.h \
-    dialogsetting.h
+    dialogsetting.h \
+    threadworker.h \
+    threadsqlconnectionworker.h
 
 FORMS += \
         mainwindow.ui \
